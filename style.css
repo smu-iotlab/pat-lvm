@@ -78,6 +78,31 @@ main {
     max-height: 100%;
     display: block; /* 移除图像底部可能出现的空白 */
 }
+/* 按钮样式 */
+button {
+    background-color: #4CAF50; /* 绿色背景 */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px; /* 圆角 */
+    opacity: 0.8; /* 初始透明度 */
+    transition: opacity 0.3s ease; /* 透明度过渡效果 */
+}
+
+button:hover {
+    opacity: 1; /* 鼠标悬停时完全不透明 */
+}
+
+button:disabled {
+    opacity: 0.5; /* 禁用时半透明 */
+    cursor: not-allowed; /* 禁用时的鼠标样式 */
+}
 #imageCanvas,
 #imageCanvas_vessel,
 #imageCanvas_flux {
