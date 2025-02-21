@@ -83,9 +83,9 @@ imageInputs.forEach(imageInput => {
 
         const img = new Image();
         img.onload = async () => {
-            // canvas.width = img.width;
-            // canvas.height = img.height;
-            // ctx.drawImage(img, 0, 0);
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
         };
         img.src = e.target.result;
         reader.readAsDataURL(file);
