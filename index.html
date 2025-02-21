@@ -18,33 +18,50 @@
         </nav>
         <main>
             <div id="segmentation" class="tab-content active">
-               <div class="upload-area">
-                   <label for="imageInput" class="upload-label">Upload Image</label>
-                 <input type="file" id="imageInput" accept="image/*">
-                 <button id="executeButton" disabled>Execute</button>  <!-- 添加执行按钮 -->
-               </div>
-               <div class="image-area">
-                   <canvas id="imageCanvas"></canvas>
-               </div>
-            </div>
-            <div id="vessel_enhancement" class="tab-content">
-              <div class="upload-area">
-                   <label for="imageInput" class="upload-label">Upload Image</label>
-                 <input type="file" id="imageInput_vessel" accept="image/*">
-                  <button id="executeButton_vessel" disabled>Execute</button> <!-- 添加执行按钮 -->
-               </div>
-                 <div class="image-area">
-                     <canvas id="imageCanvas_vessel"></canvas>
-                 </div>
-            </div>
-            <div id="flux_correction" class="tab-content">
-                  <div class="upload-area">
-                   <label for="imageInput" class="upload-label">Upload Image</label>
-                 <input type="file" id="imageInput_flux" accept="image/*">
-                     <button id="executeButton_flux" disabled>Execute</button>  <!-- 添加执行按钮 -->
-               </div>
+                <div class="upload-area">
+                    <label for="imageInput_segmentation" class="upload-label">Upload Image</label>
+                    <input type="file" id="imageInput_segmentation" accept="image/*">
+                    <button id="executeButton_segmentation" disabled>Execute Segmentation</button>
+                </div>
                 <div class="image-area">
-                    <canvas id="imageCanvas_flux"></canvas>
+                    <div class="image-box">
+                        <img id="originalImage_segmentation" src="#" alt="Original Image">
+                    </div>
+                    <div class="image-box">
+                        <img id="resultImage_segmentation" src="#" alt="Result Image">
+                    </div>
+                </div>
+            </div>
+
+            <div id="vessel_enhancement" class="tab-content">
+                <div class="upload-area">
+                    <label for="imageInput_vessel_enhancement" class="upload-label">Upload Image</label>
+                    <input type="file" id="imageInput_vessel_enhancement" accept="image/*">
+                    <button id="executeButton_vessel_enhancement" disabled>Execute Vessel Enhancement</button>
+                </div>
+                <div class="image-area">
+                   <div class="image-box">
+                        <img id="originalImage_vessel_enhancement" src="#" alt="Original Image">
+                    </div>
+                    <div class="image-box">
+                        <img id="resultImage_vessel_enhancement" src="#" alt="Result Image">
+                    </div>
+                </div>
+            </div>
+
+            <div id="flux_correction" class="tab-content">
+                <div class="upload-area">
+                    <label for="imageInput_flux_correction" class="upload-label">Upload Image</label>
+                    <input type="file" id="imageInput_flux_correction" accept="image/*">
+                    <button id="executeButton_flux_correction" disabled>Execute Flux Correction</button>
+                </div>
+                <div class="image-area">
+                    <div class="image-box">
+                        <img id="originalImage_flux_correction" src="#" alt="Original Image">
+                    </div>
+                    <div class="image-box">
+                        <img id="resultImage_flux_correction" src="#" alt="Result Image">
+                    </div>
                 </div>
             </div>
         </main>
