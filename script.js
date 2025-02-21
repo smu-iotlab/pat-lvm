@@ -31,63 +31,57 @@ imageInputs.forEach(imageInput => {
         const originalImage = document.getElementById(`originalImage_${modelType}`); // 获取原始图像元素
         const resultImage = document.getElementById(`resultImage_${modelType}`); // 获取结果图像元素
         const executeButton = document.getElementById(`executeButton_${modelType}`); // 获取执行按钮
-
+        let img = new Image(); // 增加 Image() 对象
         reader.onload = async (e) => {
-            originalImage.src = e.target.result; // 显示上传的图像
-            resultImage.src = ''; // 清空结果图像
+            img.onload = () => { // 图片加载完成后执行
+                originalImage.src = e.target.result; // 显示上传的图像
+                resultImage.src = ''; // 清空结果图像
+                executeButton.disabled = false; // 允许点击 "执行" 按钮
 
-            executeButton.disabled = false; // 允许点击 "执行" 按钮
+                // --- 点击 "执行" 按钮 ---
+                executeButton.addEventListener('click', async () => {
+                    const upload_url = 'http://10.72.129.55:8000/upload?type=' + modelType;
 
-            // --- 点击 "执行" 按钮 ---
-            executeButton.addEventListener('click', async () => {
-                const upload_url = 'http://10.72.129.55:8000/upload?type=' + modelType;
+                    const isBackendReachable = await checkBackendStatus(upload_url);
+                    if (!isBackendReachable) {
+                        alert("Backend not reachable. Please check the server.");
+                        return;
+                    }
 
-                const isBackendReachable = await checkBackendStatus(upload_url);
-                if (!isBackendReachable) {
-                    alert("Backend not reachable. Please check the server.");
-                    return;
-                }
+                    // --- 上传图像到服务器 ---
+                    const uploadResponse = await fetch(upload_url, {
+                        method: 'POST',
+                        body: e.target.result // 发送图像数据到后端
+                    });
 
-                // --- 上传图像到服务器 ---
-                const uploadResponse = await fetch(upload_url, {
-                    method: 'POST',
-                    body: e.target.result // 发送图像数据到后端
+                    const uploadData = await uploadResponse.json();
+                    if (uploadData.error) {
+                        console.error("Error from backend (upload):", uploadData.error);
+                        return;
+                    }
+
+                    // 获取图像路径
+                    const imagePath = uploadData.imagePath;
+                    const execute_url = 'http://10.72.129.55:8000/execute?imagePath=' + imagePath + '&type=' + modelType;
+                    const executeResponse = await fetch(execute_url, {
+                        method: 'POST',
+                    });
+
+                    const executeData = await executeResponse.json();
+                    if (executeData.error) {
+                        console.error("Error from backend (execute):", executeData.error);
+                        return;
+                    }
+
+                    // 获取测试结果
+                    const result = executeData.result; // result 是 base64 编码的图像数据
+
+                    resultImage.src = 'data:image/png;base64,' + result;
+
                 });
-
-                const uploadData = await uploadResponse.json();
-                if (uploadData.error) {
-                    console.error("Error from backend (upload):", uploadData.error);
-                    return;
-                }
-
-                // 获取图像路径
-                const imagePath = uploadData.imagePath;
-                const execute_url = 'http://10.72.129.55:8000/execute?imagePath=' + imagePath + '&type=' + modelType;
-                const executeResponse = await fetch(execute_url, {
-                    method: 'POST',
-                });
-
-                const executeData = await executeResponse.json();
-                if (executeData.error) {
-                    console.error("Error from backend (execute):", executeData.error);
-                    return;
-                }
-
-                // 获取测试结果
-                const result = executeData.result; // result 是 base64 编码的图像数据
-
-                resultImage.src = 'data:image/png;base64,' + result;
-
-            });
+            };
+            img.src = e.target.result; // 设置 Image 对象的 src 属性，触发图片加载
         };
-
-        const img = new Image();
-        img.onload = async () => {
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0);
-        };
-        img.src = e.target.result;
         reader.readAsDataURL(file);
     });
 });
