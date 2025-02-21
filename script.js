@@ -36,35 +36,33 @@ imageInputs.forEach(imageInput => {
             originalImage.src = e.target.result; // 显示上传的图像
             resultImage.src = ''; // 清空结果图像
 
-            // --- 上传图像到服务器 ---
-            const upload_url = 'http://your_server_ip:8000/upload?type=' + modelType;
-
-            const isBackendReachable = await checkBackendStatus(upload_url);
-            if (!isBackendReachable) {
-                executeButton.disabled = true;
-                alert("Backend not reachable. Please check the server.");
-                return;
-            }
-
-            const uploadResponse = await fetch(upload_url, {
-                method: 'POST',
-                body: e.target.result // 发送图像数据到后端
-            });
-
-            const uploadData = await uploadResponse.json();
-            if (uploadData.error) {
-                console.error("Error from backend (upload):", uploadData.error);
-                return;
-            }
-
-            // 获取图像路径
-            const imagePath = uploadData.imagePath;
-
-            executeButton.disabled = false;
+            executeButton.disabled = false; // 允许点击 "执行" 按钮
 
             // --- 点击 "执行" 按钮 ---
             executeButton.addEventListener('click', async () => {
-                const execute_url = 'http://your_server_ip:8000/execute?imagePath=' + imagePath + '&type=' + modelType;
+                const upload_url = 'http://10.72.129.55:8000/upload?type=' + modelType;
+
+                const isBackendReachable = await checkBackendStatus(upload_url);
+                if (!isBackendReachable) {
+                    alert("Backend not reachable. Please check the server.");
+                    return;
+                }
+
+                // --- 上传图像到服务器 ---
+                const uploadResponse = await fetch(upload_url, {
+                    method: 'POST',
+                    body: e.target.result // 发送图像数据到后端
+                });
+
+                const uploadData = await uploadResponse.json();
+                if (uploadData.error) {
+                    console.error("Error from backend (upload):", uploadData.error);
+                    return;
+                }
+
+                // 获取图像路径
+                const imagePath = uploadData.imagePath;
+                const execute_url = 'http://10.72.129.55:8000/execute?imagePath=' + imagePath + '&type=' + modelType;
                 const executeResponse = await fetch(execute_url, {
                     method: 'POST',
                 });
@@ -85,9 +83,9 @@ imageInputs.forEach(imageInput => {
 
         const img = new Image();
         img.onload = async () => {
-          //  canvas.width = img.width;
-          //  canvas.height = img.height;
-          //  ctx.drawImage(img, 0, 0);
+            // canvas.width = img.width;
+            // canvas.height = img.height;
+            // ctx.drawImage(img, 0, 0);
         };
         img.src = e.target.result;
         reader.readAsDataURL(file);
