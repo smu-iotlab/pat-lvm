@@ -51,7 +51,7 @@ imageInputs.forEach(imageInput => {
                     // --- 上传图像到服务器 ---
                     const uploadResponse = await fetch(upload_url, {
                         method: 'POST',
-                        body: e.target.result // 发送图像数据到后端
+                        body: file // 发送文件对象到后端
                     });
 
                     const uploadData = await uploadResponse.json();
